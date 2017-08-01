@@ -13,11 +13,11 @@
         android:layout_marginLeft="4dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="4dp"
-        android:src="@drawable/jietaobao_package"
         android:clickable="false">
     </ImageView>
 
     <TextView
+
         android:id="@+id/label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
