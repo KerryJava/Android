@@ -40,7 +40,7 @@ public class Main22Activity extends AppCompatActivity {
             list.add(values[i]);
         }
 
-        MySimpleArrayAdapter adapter2 = new MySimpleArrayAdapter(this, values);
+//        MySimpleArrayAdapter adapter2 = new MySimpleArrayAdapter(this, values);
 //        listview.setAdapter(adapter2);
 
         final StableArrayAdapter adapter = new StableArrayAdapter(this,
@@ -72,24 +72,24 @@ public class Main22Activity extends AppCompatActivity {
 //            }
 //        });
 
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, final View view,
-                                    int position, long id) {
-                final String item = (String) parent.getItemAtPosition(position);
-                view.animate().setDuration(2000).alpha(0)
-                        .withEndAction(new Runnable() {
-                            @Override
-                            public void run() {
-                                list.remove(item);
-                                adapter.notifyDataSetChanged();
-                                view.setAlpha(1);
-                            }
-                        });
-            }
-
-        });
+//        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, final View view,
+//                                    int position, long id) {
+//                final String item = (String) parent.getItemAtPosition(position);
+//                view.animate().setDuration(2000).alpha(0)
+//                        .withEndAction(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                list.remove(item);
+//                                adapter.notifyDataSetChanged();
+//                                view.setAlpha(1);
+//                            }
+//                        });
+//            }
+//
+//        });
     }
 
     @Override
@@ -207,7 +207,7 @@ public class Main22Activity extends AppCompatActivity {
                         Log.d("my app", "onClick ");
                     }
                 });
-                viewHolder.text.setClickable(false);
+//                viewHolder.text.setClickable(false);
 
 
 
@@ -243,9 +243,6 @@ public class Main22Activity extends AppCompatActivity {
             holder.checkbox.setOnClickListener(null);
             holder.checkbox.setChecked(isCheck);
 
-
-
-
             holder.checkbox.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -257,9 +254,6 @@ public class Main22Activity extends AppCompatActivity {
                     Log.d("my app", "setOnClickListener ");
                 }
             });
-
-
-
 
 
 //            rowView.setOnClickListener(new View.OnClickListener() {

@@ -75,5 +75,10 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void BtnFragmentOnclick(View view) {
+        Intent intent = new Intent(MainActivity.this, MainFragmentActivity.class);
+        startActivity(intent);
+    }
+
 
 }
