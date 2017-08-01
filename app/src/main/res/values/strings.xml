@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">一个安卓程序app</string>
+
+    <string name="hello_world">陈池是渣男!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="button_title">陈池是渣男!</string>
+    <string name="button2_title">陈池是渣男2!</string>
+    <string name="title_activity_main22">Main22Activity</string>
+
+
+</resources>
