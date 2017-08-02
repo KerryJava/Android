@@ -2,6 +2,7 @@ package com.example.lipei.myapplication;
 
 import android.app.AlertDialog;
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -133,35 +134,77 @@ public class ContactActivity extends AppCompatActivity {
 
 
     //写入通讯录
-    public void writeContacts(String strName, String strPhone) {
-        ContentResolver resolver = getContentResolver();
-        Uri uri = Uri.parse("content://com.android.contacts/raw_contacts");
-        Uri dataUri = Uri.parse("content://com.android.contacts/data");
+    public void writeContacts(String name, String phoneNumber) {
 
-        //查出最后一个ID
-        Cursor cursor = resolver.query(uri, new String[]{"_id"}, null, null, null);
-        cursor.moveToLast();
-        int lastId = cursor.getInt(0);
-        int newId = lastId + 1;
 
-        //插入一个联系人id
+        // 创建一个空的ContentValues
         ContentValues values = new ContentValues();
-        values.put("contact_id", newId);
-        resolver.insert(uri, values);
 
-        //插入电话数据
+        // 向RawContacts.CONTENT_URI空值插入，
+        // 先获取Android系统返回的rawContactId
+        // 后面要基于此id插入值
+        Uri rawContactUri = getContentResolver().insert(ContactsContract.RawContacts.CONTENT_URI, values);
+        long rawContactId = ContentUris.parseId(rawContactUri);
         values.clear();
-        values.put("raw_contact_id", newId);
-        values.put("mimetype", ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE);
-        values.put(ContactsContract.CommonDataKinds.Phone.NUMBER, strPhone);
-        resolver.insert(dataUri, values);
 
-        //插入姓名数据
+        values.put(ContactsContract.Data.RAW_CONTACT_ID, rawContactId);
+        // 内容类型
+        values.put(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE);
+        // 联系人名字
+        values.put(ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME, name);
+        // 向联系人URI添加联系人名字
+        getContentResolver().insert(ContactsContract.Data.CONTENT_URI, values);
         values.clear();
-        values.put("raw_contact_id", newId);
-        values.put("mimetype", ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE);
-        values.put(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME, strName);
-        resolver.insert(dataUri, values);
+
+        values.put(ContactsContract.Data.RAW_CONTACT_ID, rawContactId);
+        values.put(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE);
+        // 联系人的电话号码
+        values.put(ContactsContract.CommonDataKinds.Phone.NUMBER, phoneNumber);
+        // 电话类型
+        values.put(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE);
+        // 向联系人电话号码URI添加电话号码
+        getContentResolver().insert(ContactsContract.Data.CONTENT_URI, values);
+        values.clear();
+
+        values.put(ContactsContract.Data.RAW_CONTACT_ID, rawContactId);
+        values.put(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE);
+        // 联系人的Email地址
+        values.put(ContactsContract.CommonDataKinds.Email.DATA, "zhangphil@xxx.com");
+        // 电子邮件的类型
+        values.put(ContactsContract.CommonDataKinds.Email.TYPE, ContactsContract.CommonDataKinds.Email.TYPE_WORK);
+        // 向联系人Email URI添加Email数据
+        getContentResolver().insert(ContactsContract.Data.CONTENT_URI, values);
+
+        Toast.makeText(this, "联系人数据添加成功", Toast.LENGTH_SHORT).show();
+
+//        ContentResolver resolver = getContentResolver();
+//        Uri uri = Uri.parse("content://com.android.contacts/raw_contacts");
+//        Uri dataUri = Uri.parse("content://com.android.contacts/data");
+//
+//        //查出最后一个ID
+//        Cursor cursor = resolver.query(uri, new String[]{"_id"}, null, null, null);
+//        cursor.moveToLast();
+//        int lastId = cursor.getInt(0);
+//        int newId = lastId + 1;
+//
+//        //插入一个联系人id
+//        ContentValues values = new ContentValues();
+//        values.put("contact_id", newId);
+//        resolver.insert(uri, values);
+//
+//        //插入电话数据
+//        values.clear();
+//        values.put("raw_contact_id", newId);
+//        values.put("mimetype", ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE);
+//        values.put(ContactsContract.CommonDataKinds.Phone.NUMBER, strPhone);
+//        resolver.insert(dataUri, values);
+//
+//        //插入姓名数据
+//        values.clear();
+//        values.put("raw_contact_id", newId);
+//        values.put("mimetype", ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE);
+//        values.put(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME, strName);
+//        resolver.insert(dataUri, values);
     }
 
     //获取通讯录
