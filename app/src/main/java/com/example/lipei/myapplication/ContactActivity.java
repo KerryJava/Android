@@ -183,7 +183,6 @@ public class ContactActivity extends AppCompatActivity {
 
     //初始化ListView数据
     public void InitData() {
-
         List<Map<String, Object>> contacts = getContacts();  //获取通讯录
         ContactsList = contacts;
         SimpleAdapter adapterPhones;
