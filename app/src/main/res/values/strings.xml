@@ -9,6 +9,17 @@
     <string name="title_activity_main22">Main22Activity</string>
     <string name="title_activity_fragment">FragmentActivity</string>
     <string name="title_activity_main_fragment">MainFragmentActivity</string>
+    <string name="title_activity_contact">ContactActivity</string>
 
+
+    <string name="btnCancel">取消</string>
+    <string name="btnAdd">添加</string>
+    <string name="tvName">姓名：</string>
+    <string name="tvPhone">电话：</string>
+    <string name="callPhone">打电话</string>
+    <string name="sendMessage">发短信</string>
+    <string name="qxz">请选择</string>
+    <string name="btnOK">添加</string>
+    <string name="addContact">添加</string>
 
 </resources>

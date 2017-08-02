@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void Btn5Onclick(View view) {
-        Intent intent = new Intent(MainActivity.this, Main2Activity.class);
+        Intent intent = new Intent(MainActivity.this, ContactActivity.class);
         startActivity(intent);
     }
 
