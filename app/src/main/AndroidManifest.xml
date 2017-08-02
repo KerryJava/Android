@@ -12,6 +12,8 @@
     <uses-permission android:name="android.permission.READ_SMS" />
     <!-- 发送短信权限 -->
     <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+
 
     <application
         android:allowBackup="true"
@@ -47,6 +49,7 @@
             android:name=".ContactActivity"
             android:label="@string/title_activity_contact" >
         </activity>
+
     </application>
 
 </manifest>
