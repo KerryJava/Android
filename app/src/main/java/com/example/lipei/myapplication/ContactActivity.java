@@ -301,18 +301,16 @@ public class ContactActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
+
+                final String bodyStr = response.body().toString();
+
                 if (null != response.cacheResponse()) {
                     String str = response.cacheResponse().toString();
                     Log.d("wangshu", "cache---" + str);
                 } else {
-                    response.body().string();
-                    final String str = response.networkResponse().toString();
-                    Log.d("wangshu", "network---" + str);
-
-                    final String bodyStr = response.body().string();
+                    Log.d("wangshu", "network---" + bodyStr);
 //                    final String cacheStr = response.cacheResponse().body().toString();
-
-                    Log.d("wangshu", "bodyStr---" + bodyStr);
+                    Log.d("wangshu", "bodyStr---" + bodyStr + " net work ");
 //                    Log.d("wangshu", "cacheStr---" + cacheStr);
 
                     runOnUiThread(new Runnable() {
