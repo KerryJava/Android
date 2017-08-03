@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,14 +24,31 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.provider.ContactsContract.CommonDataKinds;
 
+import com.google.gson.Gson;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
+import okhttp3.Call;
+import okhttp3.FormBody;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.RequestBody.*;
+import okhttp3.Response;
+import okhttp3.Callback;
+import okio.BufferedSink;
+
 public class ContactActivity extends AppCompatActivity {
 
+    private final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json; charset=utf-8");
     private Button btnAdd;
     private ListView lvPhones;
     private TextView tvPhoneName;
@@ -56,6 +74,10 @@ public class ContactActivity extends AppCompatActivity {
 
         //显示联系人
         InitData();
+        request();
+
+        Gson gson=new Gson();
+        gson.toJson(null);
 
         //添加联系人
         btnAdd.setOnClickListener(new View.OnClickListener() {
@@ -161,7 +183,7 @@ public class ContactActivity extends AppCompatActivity {
         // 联系人的电话号码
         values.put(ContactsContract.CommonDataKinds.Phone.NUMBER, phoneNumber);
         // 电话类型
-        values.put(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE);
+        values.put(ContactsContract.CommonDataKinds.Phone.TYPE, CommonDataKinds.Phone.TYPE_MOBILE);
         // 向联系人电话号码URI添加电话号码
         getContentResolver().insert(ContactsContract.Data.CONTENT_URI, values);
         values.clear();
@@ -210,7 +232,7 @@ public class ContactActivity extends AppCompatActivity {
     //获取通讯录
     public List<Map<String, Object>> getContacts() {
         List<Map<String, Object>> listItems = new ArrayList<Map<String, Object>>();
-        Cursor cursor = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
+        Cursor cursor = getContentResolver().query(CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
         while (cursor.moveToNext()) {
             String phoneName;
             String phoneNumber;
@@ -239,4 +261,76 @@ public class ContactActivity extends AppCompatActivity {
         lvPhones.setAdapter(adapterPhones);
     }
 
+    public void request(){
+        //创建okHttpClient对象
+        OkHttpClient mOkHttpClient = new OkHttpClient();
+        //创建一个Request
+
+//        RequestBody formBody = new FormBody.Builder()
+//                .add("method", "Other.GetWithSize")
+//                .add("name", "bug")
+//                .build();
+        Gson json = new Gson();
+
+        Hashtable subTable = new Hashtable();
+        subTable.put("size", "200");
+        subTable.put("name", "home");
+
+        Hashtable table = new Hashtable();
+        table.put("method", "Banner.GetWithSize");
+        table.put("jsonrpc", "2.0");
+        table.put("id", "54321");
+        table.put("params",subTable);
+
+        String jsonStr = json.toJson(table);
+
+        RequestBody requestBody = RequestBody.create(MEDIA_TYPE_JSON, jsonStr);
+
+        final String url = "http://app.api.gupiaoxianji.com/v3.8ios";
+        final Request request = new Request.Builder()
+                .url(url)
+                .addHeader("Content-type", "application/json")
+                .post(requestBody)
+                .build();
+
+        Call mcall= mOkHttpClient.newCall(request);
+        mcall.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.d("wangshu", "onFailure---" + e.getLocalizedMessage());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (null != response.cacheResponse()) {
+                    String str = response.cacheResponse().toString();
+                    Log.d("wangshu", "cache---" + str);
+                } else {
+                    response.body().string();
+                    final String str = response.networkResponse().toString();
+                    Log.d("wangshu", "network---" + str);
+
+                    final String bodyStr = response.body().string();
+//                    final String cacheStr = response.cacheResponse().body().toString();
+
+                    Log.d("wangshu", "bodyStr---" + bodyStr);
+//                    Log.d("wangshu", "cacheStr---" + cacheStr);
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            final String str = "body" + bodyStr;
+                            Toast.makeText(getApplicationContext(), str, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        Toast.makeText(getApplicationContext(), "请求成功", Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+            }
+        });
+    }
 }
