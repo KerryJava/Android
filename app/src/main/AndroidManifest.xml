@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission.READ_SMS" />
     <!-- 发送短信权限 -->
     <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
@@ -39,8 +40,13 @@
             android:name=".Main22Activity"
             android:label="@string/title_activity_main22" >
         </activity>
+
         <activity
             android:name=".MainFragmentActivity"
+            android:label="@string/title_activity_main_fragment" >
+        </activity>
+        <activity
+            android:name=".HttpAitivity"
             android:label="@string/title_activity_main_fragment" >
         </activity>
         <activity
