@@ -50,13 +50,6 @@ public class MainFragmentActivityFragment extends Fragment {
         return view;
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-
-
-    }
 
     private class StableArrayAdapter extends ArrayAdapter<String> {
 

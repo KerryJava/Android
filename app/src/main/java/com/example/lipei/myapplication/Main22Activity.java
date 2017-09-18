@@ -1,7 +1,8 @@
 package com.example.lipei.myapplication;
 
+import android.app.Activity;
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
+//import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,7 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Main22Activity extends AppCompatActivity {
+public class Main22Activity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
