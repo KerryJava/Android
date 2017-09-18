@@ -28,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.provider.ContactsContract.CommonDataKinds;
 
+import com.example.lipei.myapplication.dummy.DummyContent;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -48,7 +49,7 @@ import okhttp3.Response;
 import okhttp3.Callback;
 import okio.BufferedSink;
 
-public class ContactActivity extends FragmentActivity implements ContactFragment.OnFragmentInteractionListener {
+public class ContactActivity extends FragmentActivity implements ContactItemFragment.OnListFragmentInteractionListener, ContactFragment.OnFragmentInteractionListener {
 
     private final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json; charset=utf-8");
     private Button btnAdd;
@@ -75,12 +76,41 @@ public class ContactActivity extends FragmentActivity implements ContactFragment
     }
 
     @Override
+    public void onListFragmentInteraction(DummyContent.DummyItem item) {
+        Log.d("IMP", "hello");
+
+        final String phoneNumber = "13826595953";// ContactsList.get(0).get("phoneNumber").toString();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(ContactActivity.this);
+        builder.setTitle(getResources().getString(R.string.qxz));
+        final String[] contactFun = new String[]{getResources().getString(R.string.callPhone), getResources().getString(R.string.sendMessage)};
+        builder.setItems(contactFun, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                String strFun = contactFun[i];
+                if (strFun.equals(getResources().getString(R.string.callPhone))) {
+                    Intent phoneIntent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phoneNumber));
+                    startActivity(phoneIntent);
+                } else {
+                    Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:" + phoneNumber + ""));
+                    intent.putExtra("sms_body", "");
+                    startActivity(intent);
+                }
+            }
+        });
+        //取消操作
+        builder.setNegativeButton(getResources().getString(R.string.btnCancel), null);
+        builder.show();
+    }
+
+    @Override
     public void onFragmentInteraction(Uri uri) {
         Log.d("IMP", uri.getPath());
     }
 
     public Fragment createFragment() {
 
+//        return new ContactItemFragment();
         return new ContactFragment();
     }
 

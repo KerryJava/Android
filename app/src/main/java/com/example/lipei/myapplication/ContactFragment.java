@@ -71,6 +71,7 @@ public class ContactFragment extends Fragment {
     private EditText edtPhone;
 
     private List<Map<String, Object>> ContactsList;  //存储所有通讯录信息
+    private List<Map<String, Object>> catergorylistItems;
 
     public ContactFragment() {
         // Required empty public constructor
@@ -187,11 +188,11 @@ public class ContactFragment extends Fragment {
                         String strFun = contactFun[i];
                         if (strFun.equals(getResources().getString(R.string.callPhone))) {
                             Intent phoneIntent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phoneNumber));
-                            //startActivity(phoneIntent);
+                            startActivity(phoneIntent);
                         } else {
                             Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:" + phoneNumber + ""));
                             intent.putExtra("sms_body", "");
-                            //startActivity(intent);
+                            startActivity(intent);
                         }
                     }
                 });
@@ -323,6 +324,11 @@ public class ContactFragment extends Fragment {
     //获取通讯录
     public List<Map<String, Object>> getContacts() {
         List<Map<String, Object>> listItems = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> catergorylistItems = new ArrayList<Map<String, Object>>();
+
+        Map<String, Object> wholelistItem = new HashMap<String, Object>();
+        List<Map<String, Object>> returnlistItems = new ArrayList<Map<String, Object>>();
+
         ContentResolver resolver = getActivity().getContentResolver();
         Cursor cursor = resolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
         while (cursor.moveToNext()) {
@@ -334,15 +340,46 @@ public class ContactFragment extends Fragment {
             listItem.put("phoneName", phoneName);
             listItem.put("phoneNumber", phoneNumber);
             listItems.add(listItem);
+
+            List<Map<String, Object>> list;
+            String firstLetter = phoneName.toLowerCase().substring(0,1);
+            if (wholelistItem.containsKey(firstLetter)) {
+                Log.d("get first letter", firstLetter);
+                list = (List<Map<String,Object>>) wholelistItem.get(firstLetter);
+            }
+            else {
+                list = new ArrayList<Map<String, Object>>();
+                wholelistItem.put(firstLetter,list);
+            }
+
+            list.add(listItem);
+
+            Map<String, Object> returnlistItem = new HashMap<String, Object>();
+            returnlistItem.put("phoneName", phoneName);
+            returnlistItem.put("phoneNumber", list.size());
+
         }
-        return listItems;
+
+        for (Map.Entry<String, Object> entry : wholelistItem.entrySet()) {
+
+            System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
+            Map<String, Object> returnlistItem = new HashMap<String, Object>();
+            returnlistItem.put("phoneName", entry.getKey());
+            List<Map<String, Object>> target = (List<Map<String, Object>>) entry.getValue();
+            returnlistItem.put("phoneNumber", target.size());
+            catergorylistItems.add(returnlistItem);
+        }
+
+        return catergorylistItems;
+//        return listItems;
     }
 
     //初始化ListView数据
     public void InitData() {
 
         List<Map<String, Object>> contacts = getContacts();  //获取通讯录
-        ContactsList = contacts;
+//        ContactsList = contacts;
+        catergorylistItems = contacts;
         SimpleAdapter adapterPhones;
         adapterPhones = new SimpleAdapter(getContext(), contacts,
                 android.R.layout.simple_list_item_2,
@@ -350,6 +387,8 @@ public class ContactFragment extends Fragment {
                 new int[]{android.R.id.text1, android.R.id.text2});
 
         lvPhones.setAdapter(adapterPhones);
+        adapterPhones.notifyDataSetChanged();
+
     }
 
     public void request(){

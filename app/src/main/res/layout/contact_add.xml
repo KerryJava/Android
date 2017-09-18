@@ -7,25 +7,29 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/tvName" />
+        android:text="@string/tvName"
+        android:textSize="24dp"/>
 
     <EditText
         android:id="@+id/edtName"
         android:inputType="textPhonetic"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="" />
+        android:text=""
+        android:textSize="24dp"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/tvPhone" />
+        android:text="@string/tvPhone"
+        android:textSize="24dp" />
 
     <EditText
         android:id="@+id/edtPhone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="phone"
-        android:text="" />
+        android:text=""
+        android:textSize="24dp" />
 
 </LinearLayout>
