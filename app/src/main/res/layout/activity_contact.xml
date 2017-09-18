@@ -3,21 +3,25 @@
     android:layout_height="match_parent"
     tools:context="com.example.lipei.myapplication.ContactActivity">
 
-    <Button
-        android:id="@+id/btnAdd"
+    <!--<Button-->
+        <!--android:id="@+id/btnAdd"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="@string/addContact" />-->
+
+
+    <!--<ListView-->
+        <!--android:layout_below="@+id/btnAdd"-->
+        <!--android:id="@+id/lvPhones"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_weight="12.07">-->
+    <!--</ListView>-->
+    <FrameLayout
+        android:id="@+id/inner_fragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/addContact" />
-
-
-    <ListView
-        android:layout_below="@+id/btnAdd"
-        android:id="@+id/lvPhones"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="12.07">
-    </ListView>
-
+        android:layout_height="match_parent">
+    </FrameLayout>
 
 
 </RelativeLayout>

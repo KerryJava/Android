@@ -1,24 +1,22 @@
 package com.example.lipei.myapplication;
 
 import android.app.AlertDialog;
+import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
-import android.provider.ContactsContract;
-//import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,7 +24,6 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.provider.ContactsContract.CommonDataKinds;
 
 import com.google.gson.Gson;
 
@@ -38,17 +35,33 @@ import java.util.List;
 import java.util.Map;
 
 import okhttp3.Call;
-import okhttp3.FormBody;
+import okhttp3.Callback;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-import okhttp3.RequestBody.*;
 import okhttp3.Response;
-import okhttp3.Callback;
-import okio.BufferedSink;
 
-public class ContactActivity extends FragmentActivity implements ContactFragment.OnFragmentInteractionListener {
+
+/**
+ * A simple {@link Fragment} subclass.
+ * Activities that contain this fragment must implement the
+ * {@link ContactFragment.OnFragmentInteractionListener} interface
+ * to handle interaction events.
+ * Use the {@link ContactFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
+public class ContactFragment extends Fragment {
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
+
+    // TODO: Rename and change types of parameters
+    private String mParam1;
+    private String mParam2;
+
+    private OnFragmentInteractionListener mListener;
 
     private final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json; charset=utf-8");
     private Button btnAdd;
@@ -59,48 +72,54 @@ public class ContactActivity extends FragmentActivity implements ContactFragment
 
     private List<Map<String, Object>> ContactsList;  //存储所有通讯录信息
 
-    //获取系统自定义字符串
-    @Override
-    public Resources getResources() {
-        return super.getResources();
+    public ContactFragment() {
+        // Required empty public constructor
+    }
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment ContactFragment.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static ContactFragment newInstance(String param1, String param2) {
+        ContactFragment fragment = new ContactFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_contact);
-
-        addFragment();
-
-    }
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-        Log.d("IMP", uri.getPath());
-    }
-
-    public Fragment createFragment() {
-
-        return new ContactFragment();
-    }
-
-    public void addFragment() {
-        FragmentManager fm = getSupportFragmentManager();
-        Fragment innerFragment = fm.findFragmentById(R.id.inner_fragment);
-
-        if (innerFragment == null) {
-            Fragment fragment = createFragment();
-            fm.beginTransaction().add(R.id.inner_fragment, fragment).commit();
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
+
+
     }
 
-    protected void onCreate2(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_contact);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View v = inflater.inflate(R.layout.fragment_contact, container, false);
+        lvPhones = (ListView) v.findViewById(R.id.lvPhones);
+        btnAdd = (Button) v.findViewById(R.id.btnAdd);      //添加
 
-//        btnAdd = (Button) findViewById(R.id.btnAdd);      //添加
-//        lvPhones = (ListView) findViewById(R.id.lvPhones);//显示
+        return v;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
         //显示联系人
         InitData();
@@ -114,10 +133,10 @@ public class ContactActivity extends FragmentActivity implements ContactFragment
             @Override
             public void onClick(View view) {
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(ContactActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setTitle(getResources().getString(R.string.addContact));
                 //    通过LayoutInflater来加载一个xml的布局文件作为一个View对象
-                View view1 = LayoutInflater.from(ContactActivity.this).inflate(R.layout.contact_add, null);
+                View view1 = LayoutInflater.from(getContext()).inflate(R.layout.contact_add, null);
 
                 builder.setView(view1);
 
@@ -131,12 +150,12 @@ public class ContactActivity extends FragmentActivity implements ContactFragment
                         String strName = edtName.getText().toString().trim();
                         String strPhone = edtPhone.getText().toString().trim();
                         if (strPhone.isEmpty()) {
-                            Toast.makeText(getApplicationContext(), "电话号码为空，添加失败!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "电话号码为空，添加失败!", Toast.LENGTH_SHORT).show();
                             return;
                         }
                         String telRegex = "((\\d{11})|^((\\d{7,8})|(\\d{4}|\\d{3})-(\\d{7,8})|(\\d{4}|\\d{3})-(\\d{7,8})-(\\d{4}|\\d{3}|\\d{2}|\\d{1})|(\\d{7,8})-(\\d{4}|\\d{3}|\\d{2}|\\d{1}))$)";  //
                         if (!edtPhone.getText().toString().matches(telRegex)) {
-                            Toast.makeText(getApplicationContext(), "请重新输入正确的电话号码，添加失败!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "请重新输入正确的电话号码，添加失败!", Toast.LENGTH_SHORT).show();
                             return;
                         }
                         writeContacts(strName, strPhone);    //添加联系人
@@ -159,7 +178,7 @@ public class ContactActivity extends FragmentActivity implements ContactFragment
                 //取得电话号码
                 final String phoneNumber = ContactsList.get(i).get("phoneNumber").toString();
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(ContactActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setTitle(getResources().getString(R.string.qxz));
                 final String[] contactFun = new String[]{getResources().getString(R.string.callPhone), getResources().getString(R.string.sendMessage)};
                 builder.setItems(contactFun, new DialogInterface.OnClickListener() {
@@ -184,6 +203,45 @@ public class ContactActivity extends FragmentActivity implements ContactFragment
 
     }
 
+    // TODO: Rename method, update argument and hook method into UI event
+    public void onButtonPressed(Uri uri) {
+        if (mListener != null) {
+            mListener.onFragmentInteraction(uri);
+        }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     * <p>
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onFragmentInteraction(Uri uri);
+    }
+
 
     //写入通讯录
     public void writeContacts(String name, String phoneNumber) {
@@ -195,7 +253,10 @@ public class ContactActivity extends FragmentActivity implements ContactFragment
         // 向RawContacts.CONTENT_URI空值插入，
         // 先获取Android系统返回的rawContactId
         // 后面要基于此id插入值
-        Uri rawContactUri = getContentResolver().insert(ContactsContract.RawContacts.CONTENT_URI, values);
+
+        ContentResolver resolver = getActivity().getContentResolver();
+
+        Uri rawContactUri = resolver.insert(ContactsContract.RawContacts.CONTENT_URI, values);
         long rawContactId = ContentUris.parseId(rawContactUri);
         values.clear();
 
@@ -205,7 +266,7 @@ public class ContactActivity extends FragmentActivity implements ContactFragment
         // 联系人名字
         values.put(ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME, name);
         // 向联系人URI添加联系人名字
-        getContentResolver().insert(ContactsContract.Data.CONTENT_URI, values);
+        resolver.insert(ContactsContract.Data.CONTENT_URI, values);
         values.clear();
 
         values.put(ContactsContract.Data.RAW_CONTACT_ID, rawContactId);
@@ -213,9 +274,9 @@ public class ContactActivity extends FragmentActivity implements ContactFragment
         // 联系人的电话号码
         values.put(ContactsContract.CommonDataKinds.Phone.NUMBER, phoneNumber);
         // 电话类型
-        values.put(ContactsContract.CommonDataKinds.Phone.TYPE, CommonDataKinds.Phone.TYPE_MOBILE);
+        values.put(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE);
         // 向联系人电话号码URI添加电话号码
-        getContentResolver().insert(ContactsContract.Data.CONTENT_URI, values);
+        resolver.insert(ContactsContract.Data.CONTENT_URI, values);
         values.clear();
 
         values.put(ContactsContract.Data.RAW_CONTACT_ID, rawContactId);
@@ -225,9 +286,9 @@ public class ContactActivity extends FragmentActivity implements ContactFragment
         // 电子邮件的类型
         values.put(ContactsContract.CommonDataKinds.Email.TYPE, ContactsContract.CommonDataKinds.Email.TYPE_WORK);
         // 向联系人Email URI添加Email数据
-        getContentResolver().insert(ContactsContract.Data.CONTENT_URI, values);
+        resolver.insert(ContactsContract.Data.CONTENT_URI, values);
 
-        Toast.makeText(this, "联系人数据添加成功", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "联系人数据添加成功", Toast.LENGTH_SHORT).show();
 
 //        ContentResolver resolver = getContentResolver();
 //        Uri uri = Uri.parse("content://com.android.contacts/raw_contacts");
@@ -262,7 +323,8 @@ public class ContactActivity extends FragmentActivity implements ContactFragment
     //获取通讯录
     public List<Map<String, Object>> getContacts() {
         List<Map<String, Object>> listItems = new ArrayList<Map<String, Object>>();
-        Cursor cursor = getContentResolver().query(CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
+        ContentResolver resolver = getActivity().getContentResolver();
+        Cursor cursor = resolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
         while (cursor.moveToNext()) {
             String phoneName;
             String phoneNumber;
@@ -282,13 +344,12 @@ public class ContactActivity extends FragmentActivity implements ContactFragment
         List<Map<String, Object>> contacts = getContacts();  //获取通讯录
         ContactsList = contacts;
         SimpleAdapter adapterPhones;
-        adapterPhones = new SimpleAdapter(this, contacts,
+        adapterPhones = new SimpleAdapter(getContext(), contacts,
                 android.R.layout.simple_list_item_2,
                 new String[]{"phoneName", "phoneNumber"},
                 new int[]{android.R.id.text1, android.R.id.text2});
 
-        ListView lvPhones;//= (ListView) findViewById(R.id.lvPhones);
-        //lvPhones.setAdapter(adapterPhones);
+        lvPhones.setAdapter(adapterPhones);
     }
 
     public void request(){
@@ -344,21 +405,23 @@ public class ContactActivity extends FragmentActivity implements ContactFragment
                     Log.d("wangshu", "bodyStr---" + bodyStr + " net work ");
 //                    Log.d("wangshu", "cacheStr---" + cacheStr);
 
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            final String str = "body" + bodyStr;
-                            Toast.makeText(getApplicationContext(), str, Toast.LENGTH_SHORT).show();
-                        }
-                    });
+
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            final String str = "body" + bodyStr;
+//                            Toast.makeText(getContext(), str, Toast.LENGTH_SHORT).show();
+//                        }
+//                    });
                 }
+                getActivity().runOnUiThread(new Runnable() {
 //                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        Toast.makeText(getApplicationContext(), "请求成功", Toast.LENGTH_SHORT).show();
-//                    }
-//                });
+                    @Override
+                    public void run() {
+                        Toast.makeText(getContext(), "请求成功", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
-    }
+}
 }
