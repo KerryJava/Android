@@ -1,32 +1,10 @@
-<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-    <!--xmlns:tools="http://schemas.android.com/tools"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--tools:context="com.example.lipei.myapplication.ContactFragment">-->
+<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"--><!--xmlns:tools="http://schemas.android.com/tools"--><!--android:layout_width="match_parent"--><!--android:layout_height="match_parent"--><!--tools:context="com.example.lipei.myapplication.ContactFragment">-->
 
-    <!--&lt;!&ndash;<ListView&ndash;&gt;-->
-        <!--&lt;!&ndash;android:id="@+id/lvPhones"&ndash;&gt;-->
-        <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
-        <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
-        <!--&lt;!&ndash;android:layout_below="@+id/btnAdd"></ListView>&ndash;&gt;-->
-<!--<LinearLayout-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:orientation="horizontal">-->
+<!--&lt;!&ndash;<ListView&ndash;&gt;--><!--&lt;!&ndash;android:id="@+id/lvPhones"&ndash;&gt;--><!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;--><!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;--><!--&lt;!&ndash;android:layout_below="@+id/btnAdd"></ListView>&ndash;&gt;--><!--<LinearLayout--><!--android:layout_width="match_parent"--><!--android:layout_height="match_parent"--><!--android:orientation="horizontal">-->
 
-    <!--<Button-->
-    <!--android:id="@+id/btnAdd"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:text="@string/addContact" />-->
+<!--<Button--><!--android:id="@+id/btnAdd"--><!--android:layout_width="match_parent"--><!--android:layout_height="wrap_content"--><!--android:text="@string/addContact" />-->
 
-    <!--<Button-->
-        <!--android:id="@+id/button6"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_weight="10"-->
-        <!--android:accessibilityTraversalAfter="@+id/btnAdd"-->
-        <!--android:text="222222" />-->
+<!--<Button--><!--android:id="@+id/button6"--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:layout_weight="10"--><!--android:accessibilityTraversalAfter="@+id/btnAdd"--><!--android:text="222222" />-->
 
 <!--</LinearLayout>-->
 
@@ -36,29 +14,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.lipei.myapplication.ContactFragment" >
+    tools:context="com.example.lipei.myapplication.ContactFragment">
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <Button
             android:id="@+id/btnAdd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:text="@string/addContact">
-        </Button>
+            android:text="@string/addContact"
+            android:textAlignment="center"></Button>
 
         <ListView
             android:id="@+id/lvPhones"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/btnAdd">
-        </ListView>
+            android:layout_below="@+id/btnAdd"
+            android:layout_margin="0dp"></ListView>
 
     </LinearLayout>
 

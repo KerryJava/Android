@@ -73,7 +73,11 @@ public class MainActivity extends Activity {
     }
 
     public void Btn5Onclick(View view) {
-        Intent intent = new Intent(MainActivity.this, ContactActivity.class);
+
+        Intent intent = new Intent(this, ContactActivity.class);
+        intent.putExtra(ContactItemFragment.ARG_LIST_TYPE, 0);
+
+        //Intent intent = new Intent(MainActivity.this, ContactActivity.class);
         startActivity(intent);
     }
 

@@ -10,9 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.lipei.myapplication.dummy.ContactData;
 import com.example.lipei.myapplication.dummy.DummyContent;
 import com.example.lipei.myapplication.dummy.DummyContent.DummyItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,11 +25,14 @@ import java.util.List;
  */
 public class ContactItemFragment extends Fragment {
 
+    public static final String ARG_LIST_TYPE = "ARG_LIST_TYPE";
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
+    private int mListType = 0;
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
+    private List<DummyItem> mItems = new ArrayList<DummyItem>();
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -38,10 +43,10 @@ public class ContactItemFragment extends Fragment {
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static ContactItemFragment newInstance(int columnCount) {
+    public static ContactItemFragment newInstance(int type) {
         ContactItemFragment fragment = new ContactItemFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
+        args.putInt(ARG_LIST_TYPE, type);
         fragment.setArguments(args);
         return fragment;
     }
@@ -51,7 +56,34 @@ public class ContactItemFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
+            mListType = getArguments().getInt(ARG_LIST_TYPE);
+
+            ContactData data = ContactData.getInstance();
+            data.getContacts(getActivity());
+
+            List<ContactData.ContactItem> list;
+
+            switch (mListType) {
+                case 0:
+                    list = data.mItems;
+                    for (ContactData.ContactItem item :
+                            list) {
+                        DummyItem dummyItem = new DummyItem(item.id, " 字开头" + " 数量  " + item.content);
+
+                        mItems.add(dummyItem);
+                    }
+                    break;
+                default:
+                    list = data.mCatergoryItems.get(mListType - 1);
+                    for (ContactData.ContactItem item :
+                            list) {
+                        DummyItem dummyItem = new DummyItem(item.id, item.content);
+                        mItems.add(dummyItem);
+                    }
+                    break;
+            }
+
+
         }
     }
 
@@ -70,7 +102,7 @@ public class ContactItemFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(mItems, mListener));
         }
         return view;
     }
@@ -105,6 +137,6 @@ public class ContactItemFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(DummyItem item, int position);
     }
 }

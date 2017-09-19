@@ -37,6 +37,7 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import okhttp3.Call;
 import okhttp3.FormBody;
@@ -57,6 +58,7 @@ public class ContactActivity extends FragmentActivity implements ContactItemFrag
     private TextView tvPhoneName;
     private TextView tvPhoneNumber;
     private EditText edtPhone;
+    private int mType = 0;
 
     private List<Map<String, Object>> ContactsList;  //存储所有通讯录信息
 
@@ -71,30 +73,51 @@ public class ContactActivity extends FragmentActivity implements ContactItemFrag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact);
 
-        addFragment();
+        int type = (int) getIntent().getSerializableExtra(
+                ContactItemFragment.ARG_LIST_TYPE);
+        mType = type;
+        addFragment(type);
 
     }
 
     @Override
-    public void onListFragmentInteraction(DummyContent.DummyItem item) {
+    public void onListFragmentInteraction(DummyContent.DummyItem item, int position) {
         Log.d("IMP", "hello");
 
-        final String phoneNumber = "13826595953";// ContactsList.get(0).get("phoneNumber").toString();
+        if (mType == 0) {
+            Intent intent = new Intent(this, ContactActivity.class);
+            intent.putExtra(ContactItemFragment.ARG_LIST_TYPE, position + 1);
+            startActivity(intent);
+            return;
+        }
 
+        clickAction(item);
+
+    }
+
+    public void clickAction(DummyContent.DummyItem item) {
+        final String phoneNumber = item.content;// ContactsList.get(0).get("phoneNumber").toString()
+        final String phoneName = item.id;
         AlertDialog.Builder builder = new AlertDialog.Builder(ContactActivity.this);
-        builder.setTitle(getResources().getString(R.string.qxz));
-        final String[] contactFun = new String[]{getResources().getString(R.string.callPhone), getResources().getString(R.string.sendMessage)};
+        builder.setTitle(getResources().getString(R.string.qxz) + " " + phoneName);
+        final String callStr = getResources().getString(R.string.callPhone) + " " + phoneNumber;
+        final String spaceStr = "";
+        final String smsStr = getResources().getString(R.string.sendMessage);
+
+
+        final String[] contactFun = new String[]{callStr, spaceStr, smsStr};
         builder.setItems(contactFun, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 String strFun = contactFun[i];
-                if (strFun.equals(getResources().getString(R.string.callPhone))) {
-                    Intent phoneIntent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phoneNumber));
-                    startActivity(phoneIntent);
-                } else {
+                if (strFun.equals(smsStr)) {
                     Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:" + phoneNumber + ""));
                     intent.putExtra("sms_body", "");
                     startActivity(intent);
+
+                } else {
+                    Intent phoneIntent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phoneNumber));
+                    startActivity(phoneIntent);
                 }
             }
         });
@@ -108,18 +131,18 @@ public class ContactActivity extends FragmentActivity implements ContactItemFrag
         Log.d("IMP", uri.getPath());
     }
 
-    public Fragment createFragment() {
+    public Fragment createFragment(int type) {
 
-//        return new ContactItemFragment();
-        return new ContactFragment();
+        return ContactItemFragment.newInstance(type);
+//        return new ContactFragment();
     }
 
-    public void addFragment() {
+    public void addFragment(int type) {
         FragmentManager fm = getSupportFragmentManager();
         Fragment innerFragment = fm.findFragmentById(R.id.inner_fragment);
 
         if (innerFragment == null) {
-            Fragment fragment = createFragment();
+            Fragment fragment = createFragment(type);
             fm.beginTransaction().add(R.id.inner_fragment, fragment).commit();
         }
 
@@ -136,7 +159,7 @@ public class ContactActivity extends FragmentActivity implements ContactItemFrag
         InitData();
         request();
 
-        Gson gson=new Gson();
+        Gson gson = new Gson();
         gson.toJson(null);
 
         //添加联系人
@@ -321,7 +344,7 @@ public class ContactActivity extends FragmentActivity implements ContactItemFrag
         //lvPhones.setAdapter(adapterPhones);
     }
 
-    public void request(){
+    public void request() {
         //创建okHttpClient对象
         OkHttpClient mOkHttpClient = new OkHttpClient();
         //创建一个Request
@@ -340,7 +363,7 @@ public class ContactActivity extends FragmentActivity implements ContactItemFrag
         table.put("method", "Banner.GetWithSize");
         table.put("jsonrpc", "2.0");
         table.put("id", "54321");
-        table.put("params",subTable);
+        table.put("params", subTable);
 
         String jsonStr = json.toJson(table);
 
@@ -353,7 +376,7 @@ public class ContactActivity extends FragmentActivity implements ContactItemFrag
                 .post(requestBody)
                 .build();
 
-        Call mcall= mOkHttpClient.newCall(request);
+        Call mcall = mOkHttpClient.newCall(request);
         mcall.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {

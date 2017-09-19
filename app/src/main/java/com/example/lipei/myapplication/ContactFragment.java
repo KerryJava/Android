@@ -1,16 +1,11 @@
 package com.example.lipei.myapplication;
 
 import android.app.AlertDialog;
-import android.content.ContentResolver;
-import android.content.ContentUris;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -25,11 +20,10 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.lipei.myapplication.dummy.ContactData;
 import com.google.gson.Gson;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
@@ -54,11 +48,11 @@ import okhttp3.Response;
 public class ContactFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
+    public static final String ARG_TPYPE_LIST = "param1";
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
+    private String mTypeList;
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
@@ -89,7 +83,7 @@ public class ContactFragment extends Fragment {
     public static ContactFragment newInstance(String param1, String param2) {
         ContactFragment fragment = new ContactFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_TPYPE_LIST, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
@@ -99,10 +93,9 @@ public class ContactFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
+            mTypeList = getArguments().getString(ARG_TPYPE_LIST);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
 
 
     }
@@ -126,7 +119,7 @@ public class ContactFragment extends Fragment {
         InitData();
         request();
 
-        Gson gson=new Gson();
+        Gson gson = new Gson();
         gson.toJson(null);
 
         //添加联系人
@@ -159,7 +152,9 @@ public class ContactFragment extends Fragment {
                             Toast.makeText(getContext(), "请重新输入正确的电话号码，添加失败!", Toast.LENGTH_SHORT).show();
                             return;
                         }
-                        writeContacts(strName, strPhone);    //添加联系人
+
+                        ContactData contactData = ContactData.getInstance();
+                        contactData.writeContacts(getActivity(), strName, strPhone);    //添加联系人
                         InitData();
                     }
                 });
@@ -244,140 +239,11 @@ public class ContactFragment extends Fragment {
     }
 
 
-    //写入通讯录
-    public void writeContacts(String name, String phoneNumber) {
-
-
-        // 创建一个空的ContentValues
-        ContentValues values = new ContentValues();
-
-        // 向RawContacts.CONTENT_URI空值插入，
-        // 先获取Android系统返回的rawContactId
-        // 后面要基于此id插入值
-
-        ContentResolver resolver = getActivity().getContentResolver();
-
-        Uri rawContactUri = resolver.insert(ContactsContract.RawContacts.CONTENT_URI, values);
-        long rawContactId = ContentUris.parseId(rawContactUri);
-        values.clear();
-
-        values.put(ContactsContract.Data.RAW_CONTACT_ID, rawContactId);
-        // 内容类型
-        values.put(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE);
-        // 联系人名字
-        values.put(ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME, name);
-        // 向联系人URI添加联系人名字
-        resolver.insert(ContactsContract.Data.CONTENT_URI, values);
-        values.clear();
-
-        values.put(ContactsContract.Data.RAW_CONTACT_ID, rawContactId);
-        values.put(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE);
-        // 联系人的电话号码
-        values.put(ContactsContract.CommonDataKinds.Phone.NUMBER, phoneNumber);
-        // 电话类型
-        values.put(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE);
-        // 向联系人电话号码URI添加电话号码
-        resolver.insert(ContactsContract.Data.CONTENT_URI, values);
-        values.clear();
-
-        values.put(ContactsContract.Data.RAW_CONTACT_ID, rawContactId);
-        values.put(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE);
-        // 联系人的Email地址
-        values.put(ContactsContract.CommonDataKinds.Email.DATA, "zhangphil@xxx.com");
-        // 电子邮件的类型
-        values.put(ContactsContract.CommonDataKinds.Email.TYPE, ContactsContract.CommonDataKinds.Email.TYPE_WORK);
-        // 向联系人Email URI添加Email数据
-        resolver.insert(ContactsContract.Data.CONTENT_URI, values);
-
-        Toast.makeText(getContext(), "联系人数据添加成功", Toast.LENGTH_SHORT).show();
-
-//        ContentResolver resolver = getContentResolver();
-//        Uri uri = Uri.parse("content://com.android.contacts/raw_contacts");
-//        Uri dataUri = Uri.parse("content://com.android.contacts/data");
-//
-//        //查出最后一个ID
-//        Cursor cursor = resolver.query(uri, new String[]{"_id"}, null, null, null);
-//        cursor.moveToLast();
-//        int lastId = cursor.getInt(0);
-//        int newId = lastId + 1;
-//
-//        //插入一个联系人id
-//        ContentValues values = new ContentValues();
-//        values.put("contact_id", newId);
-//        resolver.insert(uri, values);
-//
-//        //插入电话数据
-//        values.clear();
-//        values.put("raw_contact_id", newId);
-//        values.put("mimetype", ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE);
-//        values.put(ContactsContract.CommonDataKinds.Phone.NUMBER, strPhone);
-//        resolver.insert(dataUri, values);
-//
-//        //插入姓名数据
-//        values.clear();
-//        values.put("raw_contact_id", newId);
-//        values.put("mimetype", ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE);
-//        values.put(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME, strName);
-//        resolver.insert(dataUri, values);
-    }
-
-    //获取通讯录
-    public List<Map<String, Object>> getContacts() {
-        List<Map<String, Object>> listItems = new ArrayList<Map<String, Object>>();
-        List<Map<String, Object>> catergorylistItems = new ArrayList<Map<String, Object>>();
-
-        Map<String, Object> wholelistItem = new HashMap<String, Object>();
-        List<Map<String, Object>> returnlistItems = new ArrayList<Map<String, Object>>();
-
-        ContentResolver resolver = getActivity().getContentResolver();
-        Cursor cursor = resolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
-        while (cursor.moveToNext()) {
-            String phoneName;
-            String phoneNumber;
-            Map<String, Object> listItem = new HashMap<String, Object>();
-            phoneName = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-            phoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-            listItem.put("phoneName", phoneName);
-            listItem.put("phoneNumber", phoneNumber);
-            listItems.add(listItem);
-
-            List<Map<String, Object>> list;
-            String firstLetter = phoneName.toLowerCase().substring(0,1);
-            if (wholelistItem.containsKey(firstLetter)) {
-                Log.d("get first letter", firstLetter);
-                list = (List<Map<String,Object>>) wholelistItem.get(firstLetter);
-            }
-            else {
-                list = new ArrayList<Map<String, Object>>();
-                wholelistItem.put(firstLetter,list);
-            }
-
-            list.add(listItem);
-
-            Map<String, Object> returnlistItem = new HashMap<String, Object>();
-            returnlistItem.put("phoneName", phoneName);
-            returnlistItem.put("phoneNumber", list.size());
-
-        }
-
-        for (Map.Entry<String, Object> entry : wholelistItem.entrySet()) {
-
-            System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
-            Map<String, Object> returnlistItem = new HashMap<String, Object>();
-            returnlistItem.put("phoneName", entry.getKey());
-            List<Map<String, Object>> target = (List<Map<String, Object>>) entry.getValue();
-            returnlistItem.put("phoneNumber", target.size());
-            catergorylistItems.add(returnlistItem);
-        }
-
-        return catergorylistItems;
-//        return listItems;
-    }
-
     //初始化ListView数据
     public void InitData() {
 
-        List<Map<String, Object>> contacts = getContacts();  //获取通讯录
+        ContactData contactData = ContactData.getInstance();
+        List<Map<String, Object>> contacts = contactData.getContacts(getActivity());
 //        ContactsList = contacts;
         catergorylistItems = contacts;
         SimpleAdapter adapterPhones;
@@ -391,7 +257,7 @@ public class ContactFragment extends Fragment {
 
     }
 
-    public void request(){
+    public void request() {
         //创建okHttpClient对象
         OkHttpClient mOkHttpClient = new OkHttpClient();
         //创建一个Request
@@ -410,7 +276,7 @@ public class ContactFragment extends Fragment {
         table.put("method", "Banner.GetWithSize");
         table.put("jsonrpc", "2.0");
         table.put("id", "54321");
-        table.put("params",subTable);
+        table.put("params", subTable);
 
         String jsonStr = json.toJson(table);
 
@@ -423,7 +289,7 @@ public class ContactFragment extends Fragment {
                 .post(requestBody)
                 .build();
 
-        Call mcall= mOkHttpClient.newCall(request);
+        Call mcall = mOkHttpClient.newCall(request);
         mcall.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -454,7 +320,7 @@ public class ContactFragment extends Fragment {
 //                    });
                 }
                 getActivity().runOnUiThread(new Runnable() {
-//                runOnUiThread(new Runnable() {
+                    //                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         Toast.makeText(getContext(), "请求成功", Toast.LENGTH_SHORT).show();
@@ -462,5 +328,5 @@ public class ContactFragment extends Fragment {
                 });
             }
         });
-}
+    }
 }
