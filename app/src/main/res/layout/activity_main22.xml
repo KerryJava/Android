@@ -3,7 +3,7 @@
     android:layout_height="match_parent"
     tools:context="com.example.lipei.myapplication.Main22Activity">
 
-    <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
+    <TextView android:text="@string/function_4" android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView2" />
 

@@ -8,7 +8,7 @@
     tools:context="com.example.lipei.myapplication.MainFragmentActivityFragment"
     android:id="@+id/fragment">
 
-    <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
+    <TextView android:text="@string/function_4" android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/text" />
 

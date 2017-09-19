@@ -9,7 +9,7 @@
 <!--</LinearLayout>-->
 
 <!--</LinearLayout>-->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -35,8 +35,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/btnAdd"
-            android:layout_margin="0dp"></ListView>
+            android:divider="@android:color/darker_gray"
+            android:dividerHeight="1px"></ListView>
 
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>

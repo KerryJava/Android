@@ -18,7 +18,7 @@
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/hello_world" />
+            android:text="@string/function_4" />
 
         <Button
             android:id="@+id/button"
@@ -27,7 +27,7 @@
             android:layout_marginTop="@dimen/view_margin"
             android:nestedScrollingEnabled="true"
             android:onClick="Btn3OnClick"
-            android:text="@string/button_title"
+            android:text="@string/function_1"
             android:textSize="@dimen/text_size_big" />
 
         <Button
@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/view_margin"
             android:onClick="Btn4Onclick"
-            android:text="@string/button2_title"
+            android:text="@string/function_2"
             android:textSize="@dimen/text_size_big" />
 
         <Button
@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/view_margin"
             android:onClick="BtnFragmentOnclick"
-            android:text="@string/button2_title"
+            android:text="@string/function_2"
             android:textSize="@dimen/text_size_big" />
 
         <Button
@@ -55,7 +55,7 @@
             android:layout_below="@+id/button3"
             android:layout_marginTop="@dimen/view_margin"
             android:onClick="Btn5Onclick"
-            android:text="@string/hello_world"
+            android:text="@string/function_4"
             android:textSize="@dimen/text_size_big" />
 
     </LinearLayout>

@@ -10,6 +10,8 @@ import android.provider.ContactsContract;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.lipei.myapplication.R;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,23 +41,22 @@ public class ContactData {
     public List<List<ContactItem>> mCatergoryItems = new ArrayList<List<ContactItem>>();
 
 
-    private ContactData(){
+    private ContactData() {
         mString = "Hello";
     }
 
-    public static ContactData getInstance(){
-        if(mInstance == null)
-        {
+    public static ContactData getInstance() {
+        if (mInstance == null) {
             mInstance = new ContactData();
         }
         return mInstance;
     }
 
-    public String getString(){
+    public String getString() {
         return this.mString;
     }
 
-    public void setString(String value){
+    public void setString(String value) {
         mString = value;
     }
 
@@ -83,14 +84,13 @@ public class ContactData {
             ContactItem item = new ContactItem(phoneName, phoneNumber);
 
             List<ContactItem> list;
-            String firstLetter = phoneName.toLowerCase().substring(0,1);
+            String firstLetter = phoneName.toLowerCase().substring(0, 1);
             if (wholelistItem.containsKey(firstLetter)) {
                 Log.d("get first letter", firstLetter);
                 list = (List<ContactItem>) wholelistItem.get(firstLetter);
-            }
-            else {
+            } else {
                 list = new ArrayList<ContactItem>();
-                wholelistItem.put(firstLetter,list);
+                wholelistItem.put(firstLetter, list);
             }
 
             list.add(item);
@@ -111,7 +111,7 @@ public class ContactData {
             returnlistItem.put("phoneNumber", target.size());
             catergorylistItems.add(returnlistItem);
 
-            ContactItem item = new ContactItem(entry.getKey(), ""+target.size());
+            ContactItem item = new ContactItem(entry.getKey(), "" + target.size());
             mItems.add(item);
             mCatergoryItems.add(target);
         }
@@ -122,8 +122,6 @@ public class ContactData {
 
     //写入通讯录
     public void writeContacts(Context context, String name, String phoneNumber) {
-
-
         // 创建一个空的ContentValues
         ContentValues values = new ContentValues();
 
@@ -156,16 +154,16 @@ public class ContactData {
         resolver.insert(ContactsContract.Data.CONTENT_URI, values);
         values.clear();
 
-        values.put(ContactsContract.Data.RAW_CONTACT_ID, rawContactId);
-        values.put(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE);
-        // 联系人的Email地址
-        values.put(ContactsContract.CommonDataKinds.Email.DATA, "zhangphil@xxx.com");
-        // 电子邮件的类型
-        values.put(ContactsContract.CommonDataKinds.Email.TYPE, ContactsContract.CommonDataKinds.Email.TYPE_WORK);
-        // 向联系人Email URI添加Email数据
-        resolver.insert(ContactsContract.Data.CONTENT_URI, values);
+//        values.put(ContactsContract.Data.RAW_CONTACT_ID, rawContactId);
+//        values.put(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE);
+//        // 联系人的Email地址
+//        values.put(ContactsContract.CommonDataKinds.Email.DATA, "zhangphil@xxx.com");
+//        // 电子邮件的类型
+//        values.put(ContactsContract.CommonDataKinds.Email.TYPE, ContactsContract.CommonDataKinds.Email.TYPE_WORK);
+//        // 向联系人Email URI添加Email数据
+//        resolver.insert(ContactsContract.Data.CONTENT_URI, values);
 
-        Toast.makeText(getmContext(), "联系人数据添加成功", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, R.string.addContactSuccess, Toast.LENGTH_SHORT).show();
 
 //        ContentResolver resolver = getContentResolver();
 //        Uri uri = Uri.parse("content://com.android.contacts/raw_contacts");

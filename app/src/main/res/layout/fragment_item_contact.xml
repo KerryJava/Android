@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="0dp"
     android:background="?android:selectableItemBackground"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="-16dp">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -30,12 +31,10 @@
 
         <TextView
             android:id="@+id/content"
-            android:layout_weight="2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginBottom="@dimen/view_small_margin"
-            android:layout_marginTop="@dimen/view_small_margin"
+            android:layout_weight="2"
             android:text="号码---------------"
             android:textAppearance="?attr/textAppearanceListItem"
             android:textSize="@dimen/text_size_big" />
@@ -54,4 +53,4 @@
     </LinearLayout>
 
 
-</LinearLayout>
+</RelativeLayout>
