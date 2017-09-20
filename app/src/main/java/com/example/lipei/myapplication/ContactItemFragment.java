@@ -4,10 +4,12 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +33,8 @@ import java.util.List;
 public class ContactItemFragment extends Fragment {
 
     public static final String ARG_LIST_TYPE = "ARG_LIST_TYPE";
+    public static final String  ARG_CALLBACK = "ARG_CALLBACK";
+
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
@@ -62,11 +66,16 @@ public class ContactItemFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        updateList();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (getArguments() != null) {
+            mListType = getArguments().getInt(ARG_LIST_TYPE);
+        }
     }
 
     @Override
@@ -109,8 +118,7 @@ public class ContactItemFragment extends Fragment {
 
                         ContactData contactData = ContactData.getInstance();
                         contactData.writeContacts(getActivity(), strName, strPhone);    //添加联系人
-                        ContactData data = ContactData.getInstance();
-                        data.getContacts(getActivity());
+                        contactData.getContacts(getActivity());
                         updateList();
                     }
                 });
@@ -178,37 +186,8 @@ public class ContactItemFragment extends Fragment {
     }
 
     public void updateList() {
-        if (getArguments() != null) {
-            mListType = getArguments().getInt(ARG_LIST_TYPE);
-
-            ContactData data = ContactData.getInstance();
-
-            List<ContactData.ContactItem> list;
-            mItems.clear();
-
-            switch (mListType) {
-                case 0:
-                    list = data.mItems;
-                    for (ContactData.ContactItem item :
-                            list) {
-                        DummyItem dummyItem = new DummyItem(item.id, " 字开头" + " 数量  " + item.content);
-                        mItems.add(dummyItem);
-                    }
-                    break;
-                default:
-                    list = data.mCatergoryItems.get(mListType - 1);
-                    for (ContactData.ContactItem item :
-                            list) {
-                        DummyItem dummyItem = new DummyItem(item.id, item.content);
-                        mItems.add(dummyItem);
-                    }
-                    break;
-            }
-        }
-
-
-//        ((MyItemRecyclerViewAdapter)mRecyclerView.getAdapter()).setmValues(mItems);
-
+        mItems.clear();
+        mItems.addAll(ContactData.getInstance().fetchDummyItems(mListType));
         mRecyclerView.getAdapter().notifyDataSetChanged();
     }
 

@@ -1,5 +1,6 @@
 package com.example.lipei.myapplication;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -61,6 +62,7 @@ public class ContactActivity extends FragmentActivity implements ContactItemFrag
     private int mType = 0;
 
     private List<Map<String, Object>> ContactsList;  //存储所有通讯录信息
+    private ContactItemFragment mFragment;
 
     //获取系统自定义字符串
     @Override
@@ -85,6 +87,18 @@ public class ContactActivity extends FragmentActivity implements ContactItemFrag
 
     }
 
+    public void addFragment(int type) {
+        FragmentManager fm = getSupportFragmentManager();
+        Fragment innerFragment = fm.findFragmentById(R.id.inner_fragment);
+
+        if (innerFragment == null) {
+            Fragment fragment = createFragment(type);
+            mFragment = (ContactItemFragment) fragment;
+            fm.beginTransaction().add(R.id.inner_fragment, fragment).commit();
+        }
+
+    }
+
     @Override
     public void onListFragmentInteraction(DummyContent.DummyItem item, int position) {
         Log.d("IMP", "hello");
@@ -92,6 +106,8 @@ public class ContactActivity extends FragmentActivity implements ContactItemFrag
         if (mType == 0) {
             Intent intent = new Intent(this, ContactActivity.class);
             intent.putExtra(ContactItemFragment.ARG_LIST_TYPE, position + 1);
+            intent.putExtra(ContactItemFragment.ARG_LIST_TYPE, position + 1);
+
             startActivity(intent);
             return;
         }
@@ -140,17 +156,6 @@ public class ContactActivity extends FragmentActivity implements ContactItemFrag
 
         return ContactItemFragment.newInstance(type);
 //        return new ContactFragment();
-    }
-
-    public void addFragment(int type) {
-        FragmentManager fm = getSupportFragmentManager();
-        Fragment innerFragment = fm.findFragmentById(R.id.inner_fragment);
-
-        if (innerFragment == null) {
-            Fragment fragment = createFragment(type);
-            fm.beginTransaction().add(R.id.inner_fragment, fragment).commit();
-        }
-
     }
 
     protected void onCreate2(Bundle savedInstanceState) {
@@ -419,4 +424,5 @@ public class ContactActivity extends FragmentActivity implements ContactItemFrag
             }
         });
     }
+
 }

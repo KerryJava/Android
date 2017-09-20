@@ -39,6 +39,8 @@ public class ContactData {
 
     public List<ContactItem> mItems = new ArrayList<>();
     public List<List<ContactItem>> mCatergoryItems = new ArrayList<List<ContactItem>>();
+    public List<DummyContent.DummyItem> mDummyItems = new ArrayList<>();
+
 
 
     private ContactData() {
@@ -60,6 +62,32 @@ public class ContactData {
         mString = value;
     }
 
+    //get display data
+    public List<DummyContent.DummyItem> fetchDummyItems(int listType) {
+        List<ContactData.ContactItem> list;
+        mDummyItems.clear();
+
+        switch (listType) {
+            case 0:
+                list = mInstance.mItems;
+                for (ContactData.ContactItem item :
+                        list) {
+                    DummyContent.DummyItem dummyItem = new DummyContent.DummyItem(item.id, " 字开头" + " 数量  " + item.content);
+                    mDummyItems.add(dummyItem);
+                }
+                break;
+            default:
+                list = mInstance.mCatergoryItems.get(listType - 1);
+                for (ContactData.ContactItem item :
+                        list) {
+                    DummyContent.DummyItem dummyItem = new DummyContent.DummyItem(item.id, item.content);
+                    mDummyItems.add(dummyItem);
+                }
+                break;
+        }
+
+        return mDummyItems;
+    }
 
     //获取通讯录
     public List<Map<String, Object>> getContacts(Context context) {

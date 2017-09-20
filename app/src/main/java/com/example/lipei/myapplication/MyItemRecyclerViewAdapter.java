@@ -52,7 +52,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
                     Animation animation1 = new AlphaAnimation(0.3f, 1.0f);
-                    animation1.setDuration(4000);
+                    animation1.setDuration(500);
                     v.startAnimation(animation1);
                     mListener.onListFragmentInteraction(holder.mItem, position);
                 }
