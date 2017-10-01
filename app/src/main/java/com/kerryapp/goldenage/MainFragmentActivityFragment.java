@@ -1,4 +1,4 @@
-package com.example.lipei.myapplication;
+package com.kerryapp.goldenage;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
@@ -7,9 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;

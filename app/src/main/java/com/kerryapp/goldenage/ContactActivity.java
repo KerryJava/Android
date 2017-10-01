@@ -1,6 +1,5 @@
-package com.example.lipei.myapplication;
+package com.kerryapp.goldenage;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -17,8 +16,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -29,7 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.provider.ContactsContract.CommonDataKinds;
 
-import com.example.lipei.myapplication.dummy.DummyContent;
+import com.kerryapp.goldenage.dummy.DummyContent;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -38,18 +35,14 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import okhttp3.Call;
-import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-import okhttp3.RequestBody.*;
 import okhttp3.Response;
 import okhttp3.Callback;
-import okio.BufferedSink;
 
 public class ContactActivity extends FragmentActivity implements ContactItemFragment.OnListFragmentInteractionListener, ContactFragment.OnFragmentInteractionListener {
 

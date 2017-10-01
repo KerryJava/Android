@@ -1,4 +1,4 @@
-<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"--><!--xmlns:tools="http://schemas.android.com/tools"--><!--android:layout_width="match_parent"--><!--android:layout_height="match_parent"--><!--tools:context="com.example.lipei.myapplication.ContactFragment">-->
+<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"--><!--xmlns:tools="http://schemas.android.com/tools"--><!--android:layout_width="match_parent"--><!--android:layout_height="match_parent"--><!--tools:context="com.kerryapp.goldenage.myapplication.ContactFragment">-->
 
 <!--&lt;!&ndash;<ListView&ndash;&gt;--><!--&lt;!&ndash;android:id="@+id/lvPhones"&ndash;&gt;--><!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;--><!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;--><!--&lt;!&ndash;android:layout_below="@+id/btnAdd"></ListView>&ndash;&gt;--><!--<LinearLayout--><!--android:layout_width="match_parent"--><!--android:layout_height="match_parent"--><!--android:orientation="horizontal">-->
 
@@ -14,7 +14,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.lipei.myapplication.ContactFragment">
+    tools:context="com.kerryapp.goldenage.ContactFragment">
 
 
     <LinearLayout

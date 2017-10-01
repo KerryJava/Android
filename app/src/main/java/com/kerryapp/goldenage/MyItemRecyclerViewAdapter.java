@@ -1,4 +1,4 @@
-package com.example.lipei.myapplication;
+package com.kerryapp.goldenage;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,8 +8,8 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.TextView;
 
-import com.example.lipei.myapplication.ContactItemFragment.OnListFragmentInteractionListener;
-import com.example.lipei.myapplication.dummy.DummyContent.DummyItem;
+import com.kerryapp.goldenage.ContactItemFragment.OnListFragmentInteractionListener;
+import com.kerryapp.goldenage.dummy.DummyContent.DummyItem;
 
 import java.util.List;
 
@@ -26,16 +26,21 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
 
     private List<DummyItem> mValues;
     private final OnListFragmentInteractionListener mListener;
+    private int mType = 0;
 
-    public MyItemRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
+    public MyItemRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener, int type) {
         mValues = items;
         mListener = listener;
+        mType = type;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+        int layout = (mType == 0) ? R.layout.fragment_item_contact : R.layout.fragment_detailitem_contact;
+
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_item_contact, parent, false);
+                .inflate(layout, parent, false);
         return new ViewHolder(view);
     }
 

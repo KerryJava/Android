@@ -1,4 +1,4 @@
-package com.example.lipei.myapplication;
+package com.kerryapp.goldenage;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;

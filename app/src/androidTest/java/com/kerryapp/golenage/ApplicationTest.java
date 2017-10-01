@@ -1,4 +1,4 @@
-package com.example.lipei.myapplication;
+package com.kerryapp.goldenage;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

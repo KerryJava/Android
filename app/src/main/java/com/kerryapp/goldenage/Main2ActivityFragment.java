@@ -1,4 +1,4 @@
-package com.example.lipei.myapplication;
+package com.kerryapp.goldenage;
 
 import android.support.v4.app.Fragment;
 import android.os.Bundle;

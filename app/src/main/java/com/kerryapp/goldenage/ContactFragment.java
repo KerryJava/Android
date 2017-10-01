@@ -1,4 +1,4 @@
-package com.example.lipei.myapplication;
+package com.kerryapp.goldenage;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -20,7 +20,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.lipei.myapplication.dummy.ContactData;
+import com.kerryapp.goldenage.dummy.ContactData;
 import com.google.gson.Gson;
 
 import java.io.IOException;

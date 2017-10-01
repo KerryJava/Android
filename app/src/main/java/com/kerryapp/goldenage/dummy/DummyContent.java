@@ -1,4 +1,4 @@
-package com.example.lipei.myapplication.dummy;
+package com.kerryapp.goldenage.dummy;
 
 import java.util.ArrayList;
 import java.util.HashMap;

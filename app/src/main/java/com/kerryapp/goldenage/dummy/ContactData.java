@@ -1,4 +1,4 @@
-package com.example.lipei.myapplication.dummy;
+package com.kerryapp.goldenage.dummy;
 
 import android.content.ContentResolver;
 import android.content.ContentUris;
@@ -10,7 +10,7 @@ import android.provider.ContactsContract;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.lipei.myapplication.R;
+import com.kerryapp.goldenage.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -80,7 +80,15 @@ public class ContactData {
                 list = mInstance.mCatergoryItems.get(listType - 1);
                 for (ContactData.ContactItem item :
                         list) {
-                    DummyContent.DummyItem dummyItem = new DummyContent.DummyItem(item.id, item.content);
+                    String content;
+                    if (item.content.startsWith("0")) {
+                        content = item.content;
+                    }
+                    else {
+                        content = item.content.substring(0,3) + " " + item.content.substring(3);
+                    }
+
+                    DummyContent.DummyItem dummyItem = new DummyContent.DummyItem(item.id, content);
                     mDummyItems.add(dummyItem);
                 }
                 break;

@@ -1,4 +1,4 @@
-package com.example.lipei.myapplication;
+package com.kerryapp.goldenage;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -12,7 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
-import com.example.lipei.myapplication.dummy.DummyContent;
+import com.kerryapp.goldenage.dummy.DummyContent;
 
 /**
  * A fragment representing a list of Items.
