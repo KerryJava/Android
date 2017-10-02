@@ -20,6 +20,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.kerryapp.goldenage.common.Global;
 import com.kerryapp.goldenage.dummy.ContactData;
 import com.google.gson.Gson;
 
@@ -138,7 +139,7 @@ public class ContactFragment extends Fragment {
                 final EditText edtPhone = (EditText) view1.findViewById(R.id.edtPhone);
 
                 //确定操作
-                builder.setPositiveButton(getResources().getString(R.string.btnOK), new DialogInterface.OnClickListener() {
+                builder.setPositiveButton(getResources().getString(R.string.btnAdd), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         String strName = edtName.getText().toString().trim();
@@ -293,7 +294,7 @@ public class ContactFragment extends Fragment {
         mcall.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.d("wangshu", "onFailure---" + e.getLocalizedMessage());
+                Log.d(Global.DEBUG_TAG, "onFailure---" + e.getLocalizedMessage());
             }
 
             @Override
@@ -303,12 +304,12 @@ public class ContactFragment extends Fragment {
 
                 if (null != response.cacheResponse()) {
                     String str = response.cacheResponse().toString();
-                    Log.d("wangshu", "cache---" + str);
+                    Log.d(Global.DEBUG_TAG, "cache---" + str);
                 } else {
-                    Log.d("wangshu", "network---" + bodyStr);
+                    Log.d(Global.DEBUG_TAG, "network---" + bodyStr);
 //                    final String cacheStr = response.cacheResponse().body().toString();
-                    Log.d("wangshu", "bodyStr---" + bodyStr + " net work ");
-//                    Log.d("wangshu", "cacheStr---" + cacheStr);
+                    Log.d(Global.DEBUG_TAG, "bodyStr---" + bodyStr + " net work ");
+//                    Log.d(Global.DEBUG_TAG, "cacheStr---" + cacheStr);
 
 
 //                    runOnUiThread(new Runnable() {

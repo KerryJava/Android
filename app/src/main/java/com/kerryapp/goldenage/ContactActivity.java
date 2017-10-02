@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.provider.ContactsContract.CommonDataKinds;
 
+import com.kerryapp.goldenage.common.Global;
 import com.kerryapp.goldenage.dummy.DummyContent;
 import com.google.gson.Gson;
 
@@ -181,7 +182,7 @@ public class ContactActivity extends FragmentActivity implements ContactItemFrag
                 final EditText edtPhone = (EditText) view1.findViewById(R.id.edtPhone);
 
                 //确定操作
-                builder.setPositiveButton(getResources().getString(R.string.btnOK), new DialogInterface.OnClickListener() {
+                builder.setPositiveButton(getResources().getString(R.string.btnAdd), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         String strName = edtName.getText().toString().trim();
@@ -383,22 +384,22 @@ public class ContactActivity extends FragmentActivity implements ContactItemFrag
         mcall.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.d("wangshu", "onFailure---" + e.getLocalizedMessage());
+                Log.d(Global.DEBUG_TAG, "onFailure---" + e.getLocalizedMessage());
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
 
-                final String bodyStr = response.body().toString();
+                final String bodyStr = response.body().string();
 
                 if (null != response.cacheResponse()) {
                     String str = response.cacheResponse().toString();
-                    Log.d("wangshu", "cache---" + str);
+                    Log.d(Global.DEBUG_TAG, "cache---" + str);
                 } else {
-                    Log.d("wangshu", "network---" + bodyStr);
+                    Log.d(Global.DEBUG_TAG, "network---" + bodyStr);
 //                    final String cacheStr = response.cacheResponse().body().toString();
-                    Log.d("wangshu", "bodyStr---" + bodyStr + " net work ");
-//                    Log.d("wangshu", "cacheStr---" + cacheStr);
+                    Log.d(Global.DEBUG_TAG, "bodyStr---" + bodyStr + " net work ");
+//                    Log.d(Global.DEBUG_TAG, "cacheStr---" + cacheStr);
 
                     runOnUiThread(new Runnable() {
                         @Override

@@ -98,7 +98,7 @@ public class ContactItemFragment extends Fragment {
                 final EditText edtPhone = (EditText) view1.findViewById(R.id.edtPhone);
 
                 //确定操作
-                builder.setPositiveButton(getResources().getString(R.string.btnOK), new DialogInterface.OnClickListener() {
+                builder.setPositiveButton(getResources().getString(R.string.btnAdd), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         String strName = edtName.getText().toString().trim();
