@@ -111,7 +111,7 @@ public class ContactActivity extends FragmentActivity implements ContactItemFrag
     }
 
     public void clickAction(DummyContent.DummyItem item) {
-        final String phoneNumber = item.content;// ContactsList.get(0).get("phoneNumber").toString()
+        final String phoneNumber = item.content;// ContactsList.get(0).get(Global.NUM_KEY).toString()
         final String phoneName = item.id;
         AlertDialog.Builder builder = new AlertDialog.Builder(ContactActivity.this);
         builder.setTitle(getResources().getString(R.string.qxz) + " " + phoneName);
@@ -214,7 +214,7 @@ public class ContactActivity extends FragmentActivity implements ContactItemFrag
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 //取得电话号码
-                final String phoneNumber = ContactsList.get(i).get("phoneNumber").toString();
+                final String phoneNumber = ContactsList.get(i).get(Global.NUM_KEY).toString();
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(ContactActivity.this);
                 builder.setTitle(getResources().getString(R.string.qxz));
@@ -326,8 +326,8 @@ public class ContactActivity extends FragmentActivity implements ContactItemFrag
             Map<String, Object> listItem = new HashMap<String, Object>();
             phoneName = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
             phoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-            listItem.put("phoneName", phoneName);
-            listItem.put("phoneNumber", phoneNumber);
+            listItem.put(Global.NAME_KEY, phoneName);
+            listItem.put(Global.NUM_KEY, phoneNumber);
             listItems.add(listItem);
         }
         return listItems;
@@ -341,7 +341,7 @@ public class ContactActivity extends FragmentActivity implements ContactItemFrag
         SimpleAdapter adapterPhones;
         adapterPhones = new SimpleAdapter(this, contacts,
                 android.R.layout.simple_list_item_2,
-                new String[]{"phoneName", "phoneNumber"},
+                new String[]{Global.NAME_KEY, Global.NUM_KEY},
                 new int[]{android.R.id.text1, android.R.id.text2});
 
         ListView lvPhones;//= (ListView) findViewById(R.id.lvPhones);

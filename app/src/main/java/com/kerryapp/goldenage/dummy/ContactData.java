@@ -11,6 +11,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.kerryapp.goldenage.R;
+import com.kerryapp.goldenage.common.Global;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,7 +41,8 @@ public class ContactData {
     public List<ContactItem> mItems = new ArrayList<>();
     public List<List<ContactItem>> mCatergoryItems = new ArrayList<List<ContactItem>>();
     public List<DummyContent.DummyItem> mDummyItems = new ArrayList<>();
-
+    public List<ContactItem> mWholeItems = new ArrayList<>();
+    public List<ContactItem> mRemoteItems = new ArrayList<>();
 
 
     private ContactData() {
@@ -72,7 +74,7 @@ public class ContactData {
                 list = mInstance.mItems;
                 for (ContactData.ContactItem item :
                         list) {
-                    DummyContent.DummyItem dummyItem = new DummyContent.DummyItem(item.id, " 字开头" + " 数量  " + item.content);
+                    DummyContent.DummyItem dummyItem = new DummyContent.DummyItem(item.name, " 字开头" + " 数量  " + item.phonestr);
                     mDummyItems.add(dummyItem);
                 }
                 break;
@@ -81,14 +83,14 @@ public class ContactData {
                 for (ContactData.ContactItem item :
                         list) {
                     String content;
-                    if (item.content.startsWith("0")) {
-                        content = item.content;
+                    if (item.phonestr.startsWith("0")) {
+                        content = item.phonestr;
                     }
                     else {
-                        content = item.content.substring(0,3) + " " + item.content.substring(3);
+                        content = item.phonestr.substring(0,3) + " " + item.phonestr.substring(3);
                     }
 
-                    DummyContent.DummyItem dummyItem = new DummyContent.DummyItem(item.id, content);
+                    DummyContent.DummyItem dummyItem = new DummyContent.DummyItem(item.name, content);
                     mDummyItems.add(dummyItem);
                 }
                 break;
@@ -103,7 +105,6 @@ public class ContactData {
         List<Map<String, Object>> catergorylistItems = new ArrayList<Map<String, Object>>();
 
         Map<String, Object> wholelistItem = new HashMap<String, Object>();
-        List<Map<String, Object>> returnlistItems = new ArrayList<Map<String, Object>>();
 
         ContentResolver resolver = context.getContentResolver();
         Cursor cursor = resolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
@@ -113,16 +114,17 @@ public class ContactData {
             Map<String, Object> listItem = new HashMap<String, Object>();
             phoneName = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
             phoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-            listItem.put("phoneName", phoneName);
-            listItem.put("phoneNumber", phoneNumber);
+            listItem.put(Global.NAME_KEY, phoneName);
+            listItem.put(Global.NUM_KEY, phoneNumber);
             listItems.add(listItem);
 
             ContactItem item = new ContactItem(phoneName, phoneNumber);
+            mWholeItems.add(item);
 
             List<ContactItem> list;
             String firstLetter = phoneName.toLowerCase().substring(0, 1);
             if (wholelistItem.containsKey(firstLetter)) {
-                Log.d("get first letter", firstLetter);
+                Log.d(Global.DEBUG_TAG, firstLetter);
                 list = (List<ContactItem>) wholelistItem.get(firstLetter);
             } else {
                 list = new ArrayList<ContactItem>();
@@ -131,9 +133,7 @@ public class ContactData {
 
             list.add(item);
 //            list.add(listItem);
-
         }
-
 
         mCatergoryItems.clear();
         mItems.clear();
@@ -142,9 +142,9 @@ public class ContactData {
 
             System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
             Map<String, Object> returnlistItem = new HashMap<String, Object>();
-            returnlistItem.put("phoneName", entry.getKey());
+            returnlistItem.put(Global.NAME_KEY, entry.getKey());
             List<ContactItem> target = (List<ContactItem>) entry.getValue();
-            returnlistItem.put("phoneNumber", target.size());
+            returnlistItem.put(Global.NUM_KEY, target.size());
             catergorylistItems.add(returnlistItem);
 
             ContactItem item = new ContactItem(entry.getKey(), "" + target.size());
@@ -231,18 +231,34 @@ public class ContactData {
 //        resolver.insert(dataUri, values);
     }
 
-    public static class ContactItem {
-        public String id;
-        public String content;
+    public void WriteDataFromRemote(Context context) {
+        for (ContactItem item: mRemoteItems
+             ) {
+            writeContacts(context, item.name, item.phonestr);
+        }
+    }
 
-        public ContactItem(String id, String content) {
-            this.id = id;
-            this.content = content;
+    public static class ContactItem {
+        public String name;
+        public String phonestr;
+        public long phone;
+
+
+        public ContactItem(String id, String phonestr) {
+            this.name = id;
+            this.phonestr = phonestr;
+            this.phone = Long.parseLong(phonestr.replace("-","").replaceAll("\\s*", "").trim());
+        }
+
+        public ContactItem(String id, int phone) {
+            this.name = id;
+            this.phonestr = "" + phone;
+            this.phone = phone;
         }
 
         @Override
         public String toString() {
-            return content;
+            return phonestr;
         }
     }
 }

@@ -16,9 +16,8 @@ import android.widget.Toast;
 
 import com.kerryapp.goldenage.common.Global;
 import com.kerryapp.goldenage.common.LoginAction;
-
-
-import static android.R.id.button1;
+import com.kerryapp.goldenage.common.PreferenceHelper;
+import com.kerryapp.goldenage.common.ContactListManager;
 
 public class MainActivity extends Activity {
 
@@ -29,6 +28,7 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        init();
     }
 
     @Override
@@ -70,6 +70,7 @@ public class MainActivity extends Activity {
         }
 
     };
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -98,8 +99,9 @@ public class MainActivity extends Activity {
     }
 
     public void Btn4Onclick(View view) {
-        Intent intent = new Intent(MainActivity.this, Main22Activity.class);
-        startActivity(intent);
+//        Intent intent = new Intent(MainActivity.this, Main22Activity.class);
+//        startActivity(intent);
+        ContactListManager.Request(this);
     }
 
     public void Btn5Onclick(View view) {
@@ -153,5 +155,10 @@ public class MainActivity extends Activity {
 
     public void loginRequest(String phone, String passwd) {
         LoginAction.Request(this, phone, passwd);
+    }
+
+    public void init() {
+
+        Global.setAuthToken(PreferenceHelper.getString(Global.AUTH_TOKEN_KEY, this));
     }
 }

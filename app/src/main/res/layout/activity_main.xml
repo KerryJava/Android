@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/view_margin"
             android:onClick="BtnFragmentOnclick"
-            android:text="@string/function_2"
+            android:text="@string/function_3"
             android:textSize="@dimen/text_size_big" />
 
         <Button

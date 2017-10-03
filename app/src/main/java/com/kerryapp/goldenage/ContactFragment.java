@@ -173,7 +173,7 @@ public class ContactFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 //取得电话号码
-                final String phoneNumber = ContactsList.get(i).get("phoneNumber").toString();
+                final String phoneNumber = ContactsList.get(i).get(Global.NUM_KEY).toString();
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setTitle(getResources().getString(R.string.qxz));
@@ -250,7 +250,7 @@ public class ContactFragment extends Fragment {
         SimpleAdapter adapterPhones;
         adapterPhones = new SimpleAdapter(getContext(), contacts,
                 android.R.layout.simple_list_item_2,
-                new String[]{"phoneName", "phoneNumber"},
+                new String[]{Global.NAME_KEY, Global.NUM_KEY},
                 new int[]{android.R.id.text1, android.R.id.text2});
 
         lvPhones.setAdapter(adapterPhones);
